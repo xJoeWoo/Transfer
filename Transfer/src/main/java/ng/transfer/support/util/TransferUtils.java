@@ -203,8 +203,6 @@ public class TransferUtils {
 
                     while (cursorS.moveToNext()) {
 
-                        Log.e("SIM",cursorS.getString(0) + " " + cursorS.getString(1));
-
                         //号码
                         number = cursorS.getString(1);
 
@@ -311,12 +309,12 @@ public class TransferUtils {
 
         private static Cursor getPhoneContactsCursor() {
             String[] contactsRequires = {ContactsContract.CommonDataKinds.Phone.NUMBER, ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME};
-            return queryDatabase(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, contactsRequires, null);
+            return queryDatabase(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, contactsRequires, "sort_key");
         }
 
         private static Cursor getSIMContactsCursor() {
             String[] contactsRequires = {ContactsContract.CommonDataKinds.Phone.NUMBER, ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME};
-            return queryDatabase(Uri.parse("content://icc/adn"), contactsRequires, null);
+            return queryDatabase(Uri.parse("content://icc/adn"), contactsRequires, "sort_key");
         }
 
         private static Cursor getSMSCursor() {
