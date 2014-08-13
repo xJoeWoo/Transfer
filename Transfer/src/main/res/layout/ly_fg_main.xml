@@ -1,0 +1,168 @@
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        tools:context=".MainActivity$PlaceholderFragment">
+
+
+        <TextView
+            android:id="@+id/tv_upload_choose"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:paddingBottom="@dimen/activity_vertical_margin"
+            android:text="@string/tv_upload_choose" />
+
+        <HorizontalScrollView
+            android:id="@+id/sv_choose"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/tv_upload_choose"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:overScrollMode="never"
+            android:scrollbars="none">
+
+
+            <RelativeLayout
+                android:id="@+id/rl_btn_tgs"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingBottom="@dimen/activity_vertical_margin">
+
+                <ToggleButton
+                    android:id="@+id/btn_tg_call_record"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_marginLeft="@dimen/fg_main_btn_bg_margin"
+                    android:layout_marginRight="@dimen/fg_main_btn_bg_margin"
+                    android:width="@dimen/btn_tg_choose_width"
+                    android:height="@dimen/btn_tg_choose_width"
+                    android:background="@drawable/toggle_btn_selector"
+                    android:checked="true"
+                    android:textColor="@android:color/white"
+                    android:textOff="@string/btn_bg_call_record"
+                    android:textOn="@string/btn_bg_call_record"
+                    android:textSize="12sp" />
+
+                <ToggleButton
+                    android:id="@+id/btn_tg_contacts"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/fg_main_btn_bg_margin"
+                    android:layout_marginRight="@dimen/fg_main_btn_bg_margin"
+                    android:layout_toRightOf="@id/btn_tg_call_record"
+                    android:width="@dimen/btn_tg_choose_width"
+                    android:height="@dimen/btn_tg_choose_height"
+                    android:background="@drawable/toggle_btn_selector"
+                    android:checked="true"
+                    android:textColor="@android:color/white"
+                    android:textOff="@string/btn_bg_contacts"
+                    android:textOn="@string/btn_bg_contacts"
+                    android:textSize="12sp" />
+
+                <ToggleButton
+                    android:id="@+id/btn_tg_sms"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/fg_main_btn_bg_margin"
+                    android:layout_marginRight="@dimen/fg_main_btn_bg_margin"
+                    android:layout_toRightOf="@id/btn_tg_contacts"
+                    android:width="@dimen/btn_tg_choose_width"
+                    android:height="@dimen/btn_tg_choose_height"
+                    android:background="@drawable/toggle_btn_selector"
+                    android:checked="true"
+                    android:textColor="@android:color/white"
+                    android:textOff="@string/btn_bg_sms"
+                    android:textOn="@string/btn_bg_sms"
+                    android:textSize="12sp" />
+
+                <ToggleButton
+                    android:id="@+id/btn_tg_images"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/fg_main_btn_bg_margin"
+                    android:layout_marginRight="@dimen/fg_main_btn_bg_margin"
+                    android:layout_toRightOf="@id/btn_tg_sms"
+                    android:width="@dimen/btn_tg_choose_width"
+                    android:height="@dimen/btn_tg_choose_height"
+                    android:background="@drawable/toggle_btn_selector"
+                    android:checked="true"
+                    android:textColor="@android:color/white"
+                    android:textOff="@string/btn_bg_images"
+                    android:textOn="@string/btn_bg_images"
+                    android:textSize="12sp" />
+
+                <ToggleButton
+                    android:id="@+id/btn_tg_videos"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/fg_main_btn_bg_margin"
+                    android:layout_marginRight="@dimen/fg_main_btn_bg_margin"
+                    android:layout_toRightOf="@id/btn_tg_images"
+                    android:width="@dimen/btn_tg_choose_width"
+                    android:height="@dimen/btn_tg_choose_height"
+                    android:background="@drawable/toggle_btn_selector"
+                    android:checked="true"
+                    android:textColor="@android:color/white"
+                    android:textOff="@string/btn_bg_videos"
+                    android:textOn="@string/btn_bg_videos"
+                    android:textSize="12sp" />
+
+            </RelativeLayout>
+        </HorizontalScrollView>
+
+        <RelativeLayout
+            android:id="@+id/rl_et_url"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/sv_choose">
+
+            <TextView
+                android:id="@+id/tv_input_url"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentTop="true"
+                android:text="@string/tv_input_url" />
+
+
+            <EditText
+                android:id="@+id/et_ip"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentRight="true"
+                android:layout_below="@+id/tv_input_url"
+                android:layout_marginTop="4dp"
+                android:hint="@string/et_url"
+                android:inputType="number" />
+
+
+        </RelativeLayout>
+
+
+        <ng.transfer.support.view.UploadButton
+            android:id="@+id/btn_start_upload"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/rl_et_url"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="@dimen/rl_btn_tgs_btn_upload_margin"
+            android:width="@dimen/btn_upload_width"
+            android:height="@dimen/btn_upload_height"
+            android:background="@drawable/start_upload_selector" />
+
+
+    </RelativeLayout>
+
+</ScrollView>

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">数据上传</string>
+
+    <string name="btn_bg_call_record">通话记录</string>
+    <string name="btn_bg_contacts">联系人</string>
+    <string name="btn_bg_sms">短信</string>
+    <string name="btn_bg_images">图片</string>
+    <string name="btn_bg_videos">视频</string>
+
+    <string name="btn_upload_start">开始上传</string>
+    <string name="btn_upload_uploading">正在上传</string>
+    <string name="btn_upload_ready">准备上传</string>
+    <string name="btn_upload_finished">完成上传</string>
+    <string name="btn_upload_failed">需重试上传</string>
+    <string name="btn_upload_scan_images">搜索图片</string>
+    <string name="btn_upload_scan_videos">搜索视频</string>
+    <string name="btn_upload_upload_images">图片</string>
+    <string name="btn_upload_upload_videos">视频</string>
+
+    <string name="tv_input_url">输入地址：</string>
+    
+    <string name="et_url">在此输入地址</string>
+
+    <string name="toast_is_uploading">正在上传中……</string>
+    <string name="toast_type_ip">请先输入地址</string>
+    <string name="toast_connect_wifi">请先连接WIFI</string>
+    <string name="toast_insert_sd">请先插入SD卡</string>
+
+    <string name="dialog_has_fails">只上传失败文件？</string>
+    <string name="dialog_has_fails_title">有上传失败纪录</string>
+    <string name="dialog_upload_failed">是</string>
+    <string name="dialog_upload_all">全部上传</string>
+
+    <string name="tv_upload_choose">上传以下资料（点击取消）：</string>
+
+
+
+</resources>
