@@ -7,20 +7,18 @@ import android.graphics.Paint;
 import android.graphics.RectF;
 import android.text.TextPaint;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.widget.Button;
 
 import ng.transfer.R;
 import ng.transfer.support.info.Defines;
 import ng.transfer.support.info.Transfer;
-import ng.transfer.support.util.TransferUtils;
 
 /**
  * Created by Joe on 2014/6/10.
  */
 public class UploadButton extends Button {
 
-    private static final float ARC_WIDTH = 6;
+    //    private static final float ARC_WIDTH = 6;
     private float progress = Defines.STATUS_RESET;
     private String progressStr = "0/0";
     private Paint paint;
@@ -63,16 +61,12 @@ public class UploadButton extends Button {
         super.onDraw(canvas);
 
         if (!init) {
-            canvasHeight = (int)Transfer.getGlobalContext().getResources().getDimension(R.dimen.btn_upload_height);
-            canvasWidth = (int)Transfer.getGlobalContext().getResources().getDimension(R.dimen.btn_upload_width);
+            canvasHeight = (int) Transfer.getGlobalContext().getResources().getDimension(R.dimen.btn_upload_height);
+            canvasWidth = (int) Transfer.getGlobalContext().getResources().getDimension(R.dimen.btn_upload_width);
             rectF.left = 0;
             rectF.top = 0;
-            rectF.right = (int)Transfer.getGlobalContext().getResources().getDimension(R.dimen.btn_upload_width);
-            rectF.bottom = (int)Transfer.getGlobalContext().getResources().getDimension(R.dimen.btn_upload_height);
-            Log.e("RECT_F", String.valueOf(rectF.left));
-            Log.e("RECT_F", String.valueOf(rectF.top));
-            Log.e("RECT_F", String.valueOf(rectF.right));
-            Log.e("RECT_F", String.valueOf(rectF.bottom));
+            rectF.right = (int) Transfer.getGlobalContext().getResources().getDimension(R.dimen.btn_upload_width);
+            rectF.bottom = (int) Transfer.getGlobalContext().getResources().getDimension(R.dimen.btn_upload_height);
             init = true;
         }
 
@@ -90,7 +84,7 @@ public class UploadButton extends Button {
             int currentIndex = Integer.valueOf(progressStr.substring(0, progressStr.indexOf('/')));
             int allFilesCount = Integer.valueOf(progressStr.substring(progressStr.indexOf('/') + 1, progressStr.length()));
             canvas.drawArc(rectF, 270, ((float) currentIndex / (float) allFilesCount) * 360, true, paint);
-        } else if(progress == Defines.STATUS_FINISHED){
+        } else if (progress == Defines.STATUS_FINISHED) {
             paint.setColor(colorHoloGreen);
             canvas.drawArc(rectF, 270, 360, true, paint);
         } else
@@ -104,10 +98,10 @@ public class UploadButton extends Button {
         } else {
             if (progress == Defines.STATUS_RESET) {
                 drawButtonText(Transfer.getResString(R.string.btn_upload_start), canvas);
-                setEnabled(true);
             } else if (progress == Defines.STATUS_READY) {
-//            setEnabled(false);
                 drawButtonText(Transfer.getResString(R.string.btn_upload_ready), canvas);
+            } else if (progress == Defines.STATUS_UPLOADING_TEXT) {
+                drawButtonText(Transfer.getResString(R.string.btn_upload_upload_text), canvas);
             } else if (progress > 0 && progress <= 100) {
                 drawButtonText(Transfer.getResString(R.string.btn_upload_uploading) + '\n' + progress + '%', canvas);
             } else if (progress == Defines.STATUS_FINISHED) {

@@ -27,6 +27,7 @@ public class Defines {
     public static final float STATUS_SCAN_VIDEOS = -6;
     public static final float STATUS_UPLOADING_IMAGES = -7;
     public static final float STATUS_UPLOADING_VIDEOS = -8;
+    public static final float STATUS_UPLOADING_TEXT = -9;
 
     public static final String PARAM_JSON = "json";
     public static final String PARAM_IMAGE = "image";

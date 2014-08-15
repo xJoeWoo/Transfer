@@ -46,9 +46,9 @@ public class VideoHelper extends Thread {
             Map<String, String> map = new HashMap<String, String>();
 
             map.put(Defines.PARAM_FILE_PATH, cursor.getString(cursor.getColumnIndex(MediaStore.Video.Media.DATA)));
-            map.put(Defines.PARAM_FILE_MODIFIED_DATE, cursor.getString(cursor.getColumnIndex(MediaStore.Video.Media.DATE_MODIFIED)));
+//            map.put(Defines.PARAM_FILE_MODIFIED_DATE, cursor.getString(cursor.getColumnIndex(MediaStore.Video.Media.DATE_MODIFIED)));
             map.put(Defines.PARAM_FILE_NAME, cursor.getString(cursor.getColumnIndex(MediaStore.Video.Media.DISPLAY_NAME)));
-            map.put(Defines.PARAM_FILE_SIZE, cursor.getString(cursor.getColumnIndex(MediaStore.Video.Media.SIZE)));
+//            map.put(Defines.PARAM_FILE_SIZE, cursor.getString(cursor.getColumnIndex(MediaStore.Video.Media.SIZE)));
 
             videosList.add(map);
 
@@ -57,9 +57,9 @@ public class VideoHelper extends Thread {
                 map = new HashMap<String, String>();
 
                 map.put(Defines.PARAM_FILE_PATH, cursor.getString(cursor.getColumnIndex(MediaStore.Video.Media.DATA)));
-                map.put(Defines.PARAM_FILE_MODIFIED_DATE, cursor.getString(cursor.getColumnIndex(MediaStore.Video.Media.DATE_MODIFIED)));
+//                map.put(Defines.PARAM_FILE_MODIFIED_DATE, cursor.getString(cursor.getColumnIndex(MediaStore.Video.Media.DATE_MODIFIED)));
                 map.put(Defines.PARAM_FILE_NAME, cursor.getString(cursor.getColumnIndex(MediaStore.Video.Media.DISPLAY_NAME)));
-                map.put(Defines.PARAM_FILE_SIZE, cursor.getString(cursor.getColumnIndex(MediaStore.Video.Media.SIZE)));
+//                map.put(Defines.PARAM_FILE_SIZE, cursor.getString(cursor.getColumnIndex(MediaStore.Video.Media.SIZE)));
 
                 videosList.add(map);
             }
@@ -74,7 +74,7 @@ public class VideoHelper extends Thread {
     public void run() {
         List<Map<String, String>> videosList = scanVideos();
         handler.obtainMessage(Defines.MSG_UPLOAD_PROGRESS, 0, 0, Defines.STATUS_READY).sendToTarget();
-        new UploadFileThread(handler, imagesList, videosList).start();
+        Transfer.getCachedThreadPool().execute(new UploadFileThread(handler, imagesList, videosList));
     }
 
 }

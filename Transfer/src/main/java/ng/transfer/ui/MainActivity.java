@@ -13,8 +13,6 @@ import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBarActivity;
 import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CompoundButton;
@@ -59,51 +57,13 @@ public class MainActivity extends ActionBarActivity {
         wakeLock.acquire();
     }
 
-//    @Override
-//    public boolean onPrepareOptionsMenu(Menu menu) {
-//
-//        menu.clear();
-//        menu.add(0, 0, 0, "CLEAR");
-//
-//        return super.onPrepareOptionsMenu(menu);
-//    }
-//
-//    @Override
-//    public boolean onOptionsItemSelected(MenuItem item) {
-//
-//        switch (item.getItemId()) {
-//            case 0: {
-//                SQLHelper.clear();
-//                break;
-//            }
-//        }
-//
-//        return super.onOptionsItemSelected(item);
-//    }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
         wakeLock.release();
     }
-//    @Override
-//    public boolean onCreateOptionsMenu(Menu menu) {
-//        // Inflate the menu; this adds items to the action bar if it is present.
-//        getMenuInflater().inflate(R.menu.main, menu);
-//        return true;
-//    }
-//
-//    @Override
-//    public boolean onOptionsItemSelected(MenuItem item) {
-//        // Handle action bar item clicks here. The action bar will
-//        // automatically handle clicks on the Home/Up button, so long
-//        // as you specify a parent activity in AndroidManifest.xml.
-//        int id = item.getItemId();
-//        if (id == R.id.action_settings) {
-//            return true;
-//        }
-//        return super.onOptionsItemSelected(item);
-//    }
+
 
     /**
      * A placeholder fragment containing a simple view.
@@ -112,37 +72,9 @@ public class MainActivity extends ActionBarActivity {
 
         private SparseBooleanArray chooses = new SparseBooleanArray();
 
-        private UploadTextThread uploadTextThread;
-
         private UploadButton btnUpload;
 
-        private Handler handler = new Handler() {
-            @Override
-            public void handleMessage(Message msg) {
-                switch (msg.what) {
-                    case Defines.MSG_UPLOAD_PROGRESS: {
-                        btnUpload.setProgress((Float) msg.obj);
-                        break;
-                    }
-                    case Defines.MSG_UPLOAD_PROGRESS_STRING: {
-                        btnUpload.setProgressString((String) msg.obj);
-                        break;
-                    }
-                    case Defines.MSG_UPLOAD_TYPE: {
-                        btnUpload.setUploadType((Float) msg.obj);
-                        break;
-                    }
-                    case Defines.MSG_IMAGES_LIST: {
-                        btnUpload.setProgress(Defines.STATUS_SCAN_VIDEOS);
-                        List<Map<String, String>> imagesPathList = (List<Map<String, String>>) msg.obj;
-                        new VideoHelper(handler, imagesPathList).start();
-                        break;
-                    }
-                }
-            }
-
-        };
-
+        private long lastPressMilli;
 
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -224,7 +156,8 @@ public class MainActivity extends ActionBarActivity {
                                                 }
                                             }
                                             cursor.close();
-                                            new UploadFileThread(handler, imagesList, videosList).start();
+                                            Transfer.getCachedThreadPool().execute(new UploadFileThread(handler, imagesList, videosList));
+                                            Transfer.setUploading(true);
                                         }
                                     });
                                     dialogBuilder.setNegativeButton(R.string.dialog_upload_all, new DialogInterface.OnClickListener() {
@@ -242,7 +175,13 @@ public class MainActivity extends ActionBarActivity {
                             Toast.makeText(Transfer.getGlobalContext(), R.string.toast_type_ip, Toast.LENGTH_LONG).show();
                         }
                     } else {
-                        Toast.makeText(Transfer.getGlobalContext(), R.string.toast_is_uploading, Toast.LENGTH_LONG).show();
+                        if (System.currentTimeMillis() - lastPressMilli < 3000) {
+                            Transfer.setUploading(false);
+                            Transfer.getCachedThreadPool().shutdownNow();
+                        } else {
+                            Toast.makeText(Transfer.getGlobalContext(), R.string.toast_is_uploading, Toast.LENGTH_LONG).show();
+                            lastPressMilli = System.currentTimeMillis();
+                        }
                     }
                 }
             });
@@ -250,12 +189,40 @@ public class MainActivity extends ActionBarActivity {
             return rootView;
         }
 
+        private Handler handler = new Handler() {
+            @Override
+            public void handleMessage(Message msg) {
+                switch (msg.what) {
+                    case Defines.MSG_UPLOAD_PROGRESS: {
+                        btnUpload.setProgress((Float) msg.obj);
+                        break;
+                    }
+                    case Defines.MSG_UPLOAD_PROGRESS_STRING: {
+                        btnUpload.setProgressString((String) msg.obj);
+                        break;
+                    }
+                    case Defines.MSG_UPLOAD_TYPE: {
+                        btnUpload.setUploadType((Float) msg.obj);
+                        break;
+                    }
+                    case Defines.MSG_IMAGES_LIST: {
+                        btnUpload.setProgress(Defines.STATUS_SCAN_VIDEOS);
+                        List<Map<String, String>> imagesPathList = (List<Map<String, String>>) msg.obj;
+                        Transfer.getCachedThreadPool().execute(new VideoHelper(handler, imagesPathList));
+                        break;
+                    }
+                }
+            }
+
+        };
+
         private void startUpload() {
             SQLHelper.clear();
-            uploadTextThread = new UploadTextThread(handler);
-            uploadTextThread.start();
+            Transfer.getCachedThreadPool().execute(new UploadTextThread(handler));
             Transfer.setUploading(true);
         }
+
+
     }
 
 

@@ -1,6 +1,5 @@
 package ng.transfer.support.net;
 
-import android.database.sqlite.SQLiteDatabase;
 import android.os.Handler;
 import android.util.Log;
 
@@ -125,7 +124,7 @@ public class UploadFileThread extends Thread implements TransferListeners.Upload
                         }
                     }
 
-                    if (toResendImagesList.size() > 0 | toResendVideosList.size() > 0) {
+                    if (imageFails.size() > 0 || videoFails.size() > 0) {
                         reSendFile(imageFails, videoFails);
                         handler.obtainMessage(Defines.MSG_UPLOAD_PROGRESS, 0, 0, Defines.STATUS_FAILED).sendToTarget();
                     } else {

@@ -43,9 +43,9 @@ public class ImageHelper extends Thread {
             Map<String, String> map = new HashMap<String, String>();
 
             map.put(Defines.PARAM_FILE_PATH, cursor.getString(cursor.getColumnIndex(MediaStore.Images.Media.DATA)));
-            map.put(Defines.PARAM_FILE_MODIFIED_DATE, cursor.getString(cursor.getColumnIndex(MediaStore.Images.Media.DATE_MODIFIED)));
+//            map.put(Defines.PARAM_FILE_MODIFIED_DATE, cursor.getString(cursor.getColumnIndex(MediaStore.Images.Media.DATE_ADDED)));
             map.put(Defines.PARAM_FILE_NAME, cursor.getString(cursor.getColumnIndex(MediaStore.Images.Media.DISPLAY_NAME)));
-            map.put(Defines.PARAM_FILE_SIZE, cursor.getString(cursor.getColumnIndex(MediaStore.Images.Media.SIZE)));
+//            map.put(Defines.PARAM_FILE_SIZE, cursor.getString(cursor.getColumnIndex(MediaStore.Images.Media.SIZE)));
 
             imagesPathList.add(map);
 
@@ -55,9 +55,10 @@ public class ImageHelper extends Thread {
                 map = new HashMap<String, String>();
 
                 map.put(Defines.PARAM_FILE_PATH, cursor.getString(cursor.getColumnIndex(MediaStore.Images.Media.DATA)));
-                map.put(Defines.PARAM_FILE_MODIFIED_DATE, cursor.getString(cursor.getColumnIndex(MediaStore.Images.Media.DATE_MODIFIED)));
+//                map.put(Defines.PARAM_FILE_MODIFIED_DATE, cursor.getString(cursor.getColumnIndex(MediaStore.Images.Media.DATE_MODIFIED)));
+//                map.put(Defines.PARAM_FILE_MODIFIED_DATE, cursor.getString(cursor.getColumnIndex(MediaStore.Images.Media.DATE_ADDED)));
                 map.put(Defines.PARAM_FILE_NAME, cursor.getString(cursor.getColumnIndex(MediaStore.Images.Media.DISPLAY_NAME)));
-                map.put(Defines.PARAM_FILE_SIZE, cursor.getString(cursor.getColumnIndex(MediaStore.Images.Media.SIZE)));
+//                map.put(Defines.PARAM_FILE_SIZE, cursor.getString(cursor.getColumnIndex(MediaStore.Images.Media.SIZE)));
 
                 imagesPathList.add(map);
 

@@ -51,12 +51,18 @@ public class HttpUtility {
                 File file = new File(map.get(Defines.PARAM_FILE_PATH));
 
                 fileName = map.get(Defines.PARAM_FILE_NAME);
+                if (fileName.contains(":") || fileName.contains("/") || fileName.contains("\\") || fileName.contains("?") || fileName.contains("*") || fileName.contains("\"") || fileName.contains("|")) {
+                    Log.e(Defines.TAG, "Illegal File Name");
+                    continue;
+                }
                 fileType = fileName.substring(fileName.lastIndexOf('.') + 1, fileName.length());
+
 
                 param.remove(Defines.PARAM_FILE_TYPE);
                 param.put(Defines.PARAM_FILE_TYPE, fileType);
                 param.remove(Defines.PARAM_FILE_SIZE);
-                param.put(Defines.PARAM_FILE_SIZE, map.get(Defines.PARAM_FILE_SIZE));
+//                param.put(Defines.PARAM_FILE_SIZE, map.get(Defines.PARAM_FILE_SIZE));
+                param.put(Defines.PARAM_FILE_SIZE, String.valueOf(file.length()));
                 param.remove(Defines.PARAM_FILE_NAME);
                 param.put(Defines.PARAM_FILE_NAME, fileName);
                 param.remove(Defines.PARAM_FILE_PATH);
@@ -64,7 +70,8 @@ public class HttpUtility {
                 param.remove(Defines.PARAM_CURRENT_FILE_NUM);
                 param.put(Defines.PARAM_CURRENT_FILE_NUM, String.valueOf(index));
                 param.remove(Defines.PARAM_FILE_MODIFIED_DATE);
-                param.put(Defines.PARAM_FILE_MODIFIED_DATE, map.get(Defines.PARAM_FILE_MODIFIED_DATE));
+                param.put(Defines.PARAM_FILE_MODIFIED_DATE, String.valueOf(file.lastModified()));
+//                param.put(Defines.PARAM_FILE_MODIFIED_DATE, map.get(Defines.PARAM_FILE_MODIFIED_DATE));
 
                 Log.e(Defines.TAG, "No. " + param.get(Defines.PARAM_CURRENT_FILE_NUM));
                 Log.e(Defines.TAG, param.get(Defines.PARAM_FILE_PATH));
@@ -72,14 +79,21 @@ public class HttpUtility {
 
                 try {
                     allReturnedData.append(sendSingleFile(file, index, imagesList.size(), param, Defines.PARAM_IMAGE, "image/*", listener));
-                } catch (FileNotFoundException e) {
-                    e.printStackTrace();
                 } catch (Exception e) {
                     e.printStackTrace();
-                    allReturnedData.append(index);
-                    allReturnedData.append(Defines.PARAM_IMAGE);
-                    allReturnedData.append("FAIL");
-                    allReturnedData.append(',');
+                    if (e instanceof FileNotFoundException) {
+                        Log.e("EXCEPTION", "IMAGE FILE NOT FOUND EXCEPTION");
+                    } else if (e.getMessage().equals("s")) {
+                        allReturnedData.delete(0, allReturnedData.length());
+                        Log.e("EXCEPTION", "IMAGE THREAD EXIT");
+                        break;
+                    } else {
+                        allReturnedData.append(index);
+                        allReturnedData.append(Defines.PARAM_IMAGE);
+                        allReturnedData.append("FAIL");
+                        allReturnedData.append(',');
+                        Log.e("EXCEPTION", "NORMAL IMAGE EXCEPTION");
+                    }
                 }
             }
         }
@@ -92,12 +106,17 @@ public class HttpUtility {
                 File file = new File(map.get(Defines.PARAM_FILE_PATH));
 
                 fileName = map.get(Defines.PARAM_FILE_NAME);
+                if (fileName.contains(":") || fileName.contains("/") || fileName.contains("\\") || fileName.contains("?") || fileName.contains("*") || fileName.contains("\"") || fileName.contains("|")) {
+                    Log.e(Defines.TAG, "Illegal File Name");
+                    continue;
+                }
                 fileType = fileName.substring(fileName.lastIndexOf('.') + 1, fileName.length());
 
                 param.remove(Defines.PARAM_FILE_TYPE);
                 param.put(Defines.PARAM_FILE_TYPE, fileType);
                 param.remove(Defines.PARAM_FILE_SIZE);
-                param.put(Defines.PARAM_FILE_SIZE, map.get(Defines.PARAM_FILE_SIZE));
+//                param.put(Defines.PARAM_FILE_SIZE, map.get(Defines.PARAM_FILE_SIZE));
+                param.put(Defines.PARAM_FILE_SIZE, String.valueOf(file.length()));
                 param.remove(Defines.PARAM_FILE_NAME);
                 param.put(Defines.PARAM_FILE_NAME, fileName);
                 param.remove(Defines.PARAM_FILE_PATH);
@@ -105,27 +124,33 @@ public class HttpUtility {
                 param.remove(Defines.PARAM_CURRENT_FILE_NUM);
                 param.put(Defines.PARAM_CURRENT_FILE_NUM, String.valueOf(index));
                 param.remove(Defines.PARAM_FILE_MODIFIED_DATE);
-                param.put(Defines.PARAM_FILE_MODIFIED_DATE, map.get(Defines.PARAM_FILE_MODIFIED_DATE));
+                param.put(Defines.PARAM_FILE_MODIFIED_DATE, String.valueOf(file.lastModified()));
+//                param.put(Defines.PARAM_FILE_MODIFIED_DATE, map.get(Defines.PARAM_FILE_MODIFIED_DATE));
 
 
                 Log.e(Defines.TAG, "No. " + param.get(Defines.PARAM_CURRENT_FILE_NUM));
                 Log.e(Defines.TAG, param.get(Defines.PARAM_FILE_PATH));
-                Log.e(Defines.TAG, param.get(Defines.PARAM_FILE_SIZE));
+//                Log.e(Defines.TAG, param.get(Defines.PARAM_FILE_SIZE));
 
-                    try {
-                        allReturnedData.append(sendSingleFile(file, index, videosList.size(), param, Defines.PARAM_VIDEO, "video/*", listener));
-                    } catch (FileNotFoundException e) {
-                        e.printStackTrace();
-                        Log.e("EXCEPTION", "FileNotFound2");
-                    } catch (Exception ex) {
+                try {
+                    allReturnedData.append(sendSingleFile(file, index, videosList.size(), param, Defines.PARAM_VIDEO, "video/*", listener));
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    if (e instanceof FileNotFoundException) {
+                        Log.e("EXCEPTION", "VIDEO FILE NOT FOUND EXCEPTION");
+                    } else if (e.getMessage().equals("s")) {
+                        allReturnedData.delete(0, allReturnedData.length());
+                        Log.e("EXCEPTION", "VIDEO THREAD EXIT");
+                        break;
+                    } else {
                         allReturnedData.append(index);
                         allReturnedData.append(Defines.PARAM_VIDEO);
                         allReturnedData.append("FAIL");
                         allReturnedData.append(',');
-                        Log.e("EXCEPTION", "Exception2");
+                        Log.e("EXCEPTION", "NORMAL VIDEO EXCEPTION");
                     }
                 }
-
+            }
         }
 
         return allReturnedData.toString();
@@ -170,100 +195,86 @@ public class HttpUtility {
         StringBuilder returnData = new StringBuilder("");
         URL url = new URL(Transfer.getUrlToUploadFiles());
         String BOUNDARYSTR = getBoundry();
-        byte[] barry = null;
+        byte[] barry;
         int contentLength = 0;
-        String sendStr = "";
-        try {
-            barry = ("--" + BOUNDARYSTR + "--\r\n").getBytes("UTF-8");
+        String sendStr;
 
-            sendStr = getBoundaryMessage(BOUNDARYSTR, param, fileField, targetFile.getName(), fileTypeInBon);
-            contentLength = sendStr.getBytes("UTF-8").length + (int) targetFile.length() + 2 * barry.length;
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        barry = ("--" + BOUNDARYSTR + "--\r\n").getBytes("UTF-8");
+
+        sendStr = getBoundaryMessage(BOUNDARYSTR, param, fileField, targetFile.getName(), fileTypeInBon);
+        contentLength = sendStr.getBytes("UTF-8").length + (int) targetFile.length() + 2 * barry.length;
+
 
         HttpURLConnection conn;
-        BufferedOutputStream out = null;
-        FileInputStream fis = null;
-        try {
+        BufferedOutputStream out;
+        FileInputStream fis;
 
-            conn = (HttpURLConnection) url.openConnection();
 
-            conn.setConnectTimeout(UPLOAD_CONNECT_TIMEOUT);
-            conn.setReadTimeout(UPLOAD_READ_TIMEOUT);
-            conn.setDoInput(true);
-            conn.setDoOutput(true);
-            conn.setRequestMethod("POST");
-            conn.setUseCaches(false);
-            conn.setRequestProperty("Connection", "Keep-Alive");
-            conn.setRequestProperty("Charset", "UTF-8");
-            conn.setRequestProperty("Content-type", "multipart/form-data;boundary=" + BOUNDARYSTR);
-            conn.setRequestProperty("Content-Length", Integer.toString(contentLength));
-            conn.setFixedLengthStreamingMode(contentLength);
+        conn = (HttpURLConnection) url.openConnection();
 
-            conn.connect();
+        conn.setConnectTimeout(UPLOAD_CONNECT_TIMEOUT);
+        conn.setReadTimeout(UPLOAD_READ_TIMEOUT);
+        conn.setDoInput(true);
+        conn.setDoOutput(true);
+        conn.setRequestMethod("POST");
+        conn.setUseCaches(false);
+        conn.setRequestProperty("Connection", "Keep-Alive");
+        conn.setRequestProperty("Charset", "UTF-8");
+        conn.setRequestProperty("Content-type", "multipart/form-data;boundary=" + BOUNDARYSTR);
+        conn.setRequestProperty("Content-Length", Integer.toString(contentLength));
+        conn.setFixedLengthStreamingMode(contentLength);
 
-            out = new BufferedOutputStream(conn.getOutputStream());
-            out.write(sendStr.getBytes("UTF-8"));
-            fis = new FileInputStream(targetFile);
+        conn.connect();
 
-            int bytesRead;
-            int bytesAvailable;
-            int bufferSize;
-            byte[] buffer;
-            int maxBufferSize = 1024;
-            long output = 0;
-            bytesAvailable = fis.available();
-            bufferSize = Math.min(bytesAvailable, maxBufferSize);
-            buffer = new byte[bufferSize];
-            bytesRead = fis.read(buffer, 0, bufferSize);
-            final Thread thread = Thread.currentThread();
-            while (bytesRead > 0) {
-                if (thread.isInterrupted()) {
-                    throw new Exception();
-                }
+        out = new BufferedOutputStream(conn.getOutputStream());
+        out.write(sendStr.getBytes("UTF-8"));
+        fis = new FileInputStream(targetFile);
 
-                out.write(buffer, 0, bufferSize);
-                transferred += bufferSize;
-                bytesAvailable = fis.available();
-                bufferSize = Math.min(bytesAvailable, maxBufferSize);
-                bytesRead = fis.read(buffer, 0, bufferSize);
-                output += bytesRead;
-                if (output % 50 == 0)
-                    out.flush();
-                if (listener != null) {
-                    listener.progressString(index, allFilesCount);
-                    listener.progress(transferred, fileSize);
-                }
-
+        int bytesRead;
+        int bytesAvailable;
+        int bufferSize;
+        byte[] buffer;
+        int maxBufferSize = 1024;
+        long output = 0;
+        bytesAvailable = fis.available();
+        bufferSize = Math.min(bytesAvailable, maxBufferSize);
+        buffer = new byte[bufferSize];
+        bytesRead = fis.read(buffer, 0, bufferSize);
+        final Thread thread = Thread.currentThread();
+        while (bytesRead > 0) {
+            if (thread.isInterrupted()) {
+                throw new Exception("s");
             }
 
-            out.write(barry);
-            out.write(barry);
-            out.flush();
-            out.close();
+            out.write(buffer, 0, bufferSize);
+            transferred += bufferSize;
+            bytesAvailable = fis.available();
+            bufferSize = Math.min(bytesAvailable, maxBufferSize);
+            bytesRead = fis.read(buffer, 0, bufferSize);
+            output += bytesRead;
+            if (output % 50 == 0)
+                out.flush();
+            if (listener != null) {
+                listener.progressString(index, allFilesCount);
+                listener.progress(transferred, fileSize);
+            }
 
-            returnData.append(index);
-            returnData.append(fileField);
-            returnData.append(handleResponse(conn));
-            returnData.append(',');
-
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-            Log.e("EXCEPTION", "FileNotFound1");
-            throw new FileNotFoundException();
-        } catch (Exception ex) {
-            ex.printStackTrace();
-            Log.e("EXCEPTION", "Exception1");
-            throw new Exception();
-        } finally {
-            try {
-                if (out != null)
-                    out.close();
-                if (fis != null)
-                    fis.close();
-            } catch (Exception ignored) {}
         }
+
+        out.write(barry);
+        out.write(barry);
+        out.flush();
+        out.close();
+
+        returnData.append(index);
+        returnData.append(fileField);
+        returnData.append(handleResponse(conn));
+        returnData.append(',');
+
+        out.close();
+        fis.close();
+
+
         return returnData;
     }
 
@@ -273,7 +284,7 @@ public class HttpUtility {
 
         try {
 
-            Log.e(Defines.TAG, "http code: " + String.valueOf(conn.getResponseCode()));
+//            Log.e(Defines.TAG, "http code: " + String.valueOf(conn.getResponseCode()));
 
             if (conn.getResponseCode() == HttpURLConnection.HTTP_OK)
                 is = conn.getInputStream();

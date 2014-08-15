@@ -3,9 +3,11 @@ package ng.transfer.support.info;
 import android.app.Application;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
-import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.util.SparseBooleanArray;
+
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import ng.transfer.support.sql.SQLHelper;
 import ng.transfer.support.util.TransferPreferences;
@@ -23,6 +25,14 @@ public class Transfer extends Application {
     private static String ipSuffix;
     private static String ipPrefix;
     private static SQLiteDatabase sql;
+    private static ExecutorService cachedThreadPool = Executors.newCachedThreadPool();
+
+    public static ExecutorService getCachedThreadPool() {
+        if (cachedThreadPool.isShutdown()) {
+            cachedThreadPool = Executors.newCachedThreadPool();
+        }
+        return cachedThreadPool;
+    }
 
     public static String getUrlToUploadText() {
         return "http://" + ipPrefix + '.' + ipSuffix + ":8080/TransferServer/upload";

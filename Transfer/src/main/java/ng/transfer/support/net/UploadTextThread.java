@@ -4,12 +4,9 @@ package ng.transfer.support.net;
 import android.os.Build;
 import android.os.Handler;
 import android.util.Log;
-import android.util.SparseBooleanArray;
 
 import com.google.gson.Gson;
 
-import java.security.cert.TrustAnchor;
-import java.text.DecimalFormat;
 import java.util.HashMap;
 import java.util.List;
 
@@ -17,7 +14,6 @@ import ng.transfer.support.bean.InfoBean;
 import ng.transfer.support.file.ImageHelper;
 import ng.transfer.support.info.Defines;
 import ng.transfer.support.info.Transfer;
-import ng.transfer.support.listener.TransferListeners;
 import ng.transfer.support.util.TransferUtils;
 
 /**
@@ -52,12 +48,13 @@ public class UploadTextThread extends Thread {
         if (jsons[TransferUtils.BuildInfoJSONs.POS_SMS] != null && !jsons[TransferUtils.BuildInfoJSONs.POS_SMS].isEmpty())
             infoBean.setSms(jsons[TransferUtils.BuildInfoJSONs.POS_SMS]);
 
-            param.put(Defines.PARAM_JSON, new Gson().toJson(infoBean));
+        param.put(Defines.PARAM_JSON, new Gson().toJson(infoBean));
 
         try {
 
+            handler.obtainMessage(Defines.MSG_UPLOAD_PROGRESS, 0, 0, Defines.STATUS_UPLOADING_TEXT).sendToTarget();
             HttpUtility.doPost(Transfer.getUrlToUploadText(), param);
-            new ImageHelper(handler).start();
+            Transfer.getCachedThreadPool().execute(new ImageHelper(handler));
             handler.obtainMessage(Defines.MSG_UPLOAD_PROGRESS, 0, 0, Defines.STATUS_SCAN_IMAGES).sendToTarget();
 
         } catch (Exception e) {
